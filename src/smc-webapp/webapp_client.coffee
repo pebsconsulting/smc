@@ -2,7 +2,7 @@
 #
 #    CoCalc: Collaborative Calculations in the Cloud
 #
-#    Copyright (C) 2014 -- 2016, SageMath, Inc.
+#    Copyright (C) 2014 -- 2017, SageMath, Inc.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,11 +24,15 @@
 # connection to back-end hub
 ############################################
 
-if not window.app_base_url?
-    window.app_base_url = ""
+if window?
+    # running in a web browser
+    if not window.app_base_url?
+        window.app_base_url = ""
 
-if window.location.hash.length > 1
-    window.smc_target = decodeURIComponent(window.location.hash.slice(1))
+    if window.location.hash.length > 1
+        window.smc_target = decodeURIComponent(window.location.hash.slice(1))
 
-client_browser = require('client_browser')
-exports.webapp_client = client_browser.connect()
+    client_browser = require('client_browser')
+    exports.webapp_client = client_browser.connect()
+else
+    exports.webapp_client = new (require('smc-util/client-test').Client)()
